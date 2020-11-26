@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Rollback;
+import org.springframework.test.context.jdbc.Sql;
 
 import javax.transaction.Transactional;
 
@@ -15,6 +16,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 @SpringBootTest
 @Slf4j
+@Sql(scripts="classpath:db/insert.sql")
 class CustomerRepositoryTest {
     @Autowired
     CustomerRepository customerRepository;
@@ -25,6 +27,7 @@ class CustomerRepositoryTest {
 
     @BeforeEach
     void setUp() {
+
         customer = new Customer();
     }
     @Test
@@ -54,14 +57,17 @@ class CustomerRepositoryTest {
     }
 
     @Test
+    @Transactional
+    @Rollback(value = false)
     void testThatTwoCustomersCanShareOneAddress(){
-        customer.setPassword("");
-        customer.setLastName("Tobi");
-        customer.setFirstName("Femi");
-        customer.setContact("08035851287");
-        customer.setEmail("tobifemi@gmail.com");
+//        customer.setPassword("");
+//        customer.setLastName("Tobi");
+//        customer.setFirstName("Femi");
+//        customer.setContact("08035851287");
+//        customer.setEmail("tobifemi@gmail.com");
+        customer = customerRepository.findById(2).orElse(null);
 
-        Address address = addressRepository.findById(4).orElse(null);
+        Address address = addressRepository.findById(1).orElse(null);
 
         customer.setAddresses(address);
 
@@ -78,7 +84,7 @@ class CustomerRepositoryTest {
     void testThatOneCustomerCanHaveMultipleAdddress(){
         customer = customerRepository.findById(2).orElse(null);
 
-        Address address = addressRepository.findById(3).orElse(null);
+        Address address = addressRepository.findById(1).orElse(null);
 
         customer.setAddresses(address);
 
@@ -92,7 +98,7 @@ class CustomerRepositoryTest {
     @Transactional
     @Rollback(value = false)
     void testThatWeCanFetchAllCustomerAddress(){
-        customer= customerRepository.findById(2).orElse(null);
+        customer= customerRepository.findById(1).orElse(null);
 
         assert customer != null;
         for (Address address: customer.getAddresses()){
@@ -105,17 +111,28 @@ class CustomerRepositoryTest {
     @Transactional
     @Rollback
     void testThatWeCanRemoveAnAddressFromACustomerAddressesList(){
-        customer = customerRepository.findById(2).orElse(null);
+        customer = customerRepository.findById(1).orElse(null);
 
         assert customer != null;
 
-        Address address = addressRepository.findById(3).orElse(null);
+        Address address = addressRepository.findById(1).orElse(null);
 
         if (customer.getAddresses().contains(address)){
             customer.getAddresses().remove(address);
         }
         assertThat(customer.getAddresses().size()).isEqualTo(1);
     }
+    @Test
+    void testThatWeCanUpdateCustomerDetails(){
+        customer=customerRepository.findById(2).orElse(null);
+
+        customer.setPassword("tobi123");
+
+        customerRepository.save(customer);
+
+        assertThat(customer.getPassword()).isEqualTo("tobi123");
+    }
+
 //    @Test
 //    @Transactional
 //    @Rollback(value = false)

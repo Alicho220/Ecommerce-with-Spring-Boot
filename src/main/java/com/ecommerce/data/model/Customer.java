@@ -1,6 +1,7 @@
 package com.ecommerce.data.model;
 
 import lombok.Data;
+import lombok.ToString;
 
 import javax.persistence.*;
 import javax.persistence.criteria.CriteriaBuilder;
@@ -23,7 +24,8 @@ public class Customer {
     private String contact;
     private String password;
 
-    @ManyToMany(cascade = CascadeType.DETACH)
+    @ManyToMany(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
+    @ToString.Exclude
     private Set<Address> addresses;
 
     public void setAddresses (Address address){
@@ -35,6 +37,12 @@ public class Customer {
         }
 
     }
+    public void setCards(Card card){
+        if(card == null){
+            cards = new HashSet<>();
+        }
+        cards.add(card);
+    }
 
     private boolean checkIfAddressExist(Address address){
         if(!getAddresses().contains(address)){
@@ -42,4 +50,12 @@ public class Customer {
         }
         return false;
     }
+
+    @OneToMany(mappedBy = "customer")
+    @ToString.Exclude
+    private Set<Card> cards;
+
+    @OneToMany(mappedBy = "customer", fetch = FetchType.EAGER)
+    @ToString.Exclude
+    private Set<Order> orders;
 }
