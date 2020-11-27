@@ -22,7 +22,7 @@ public class Card {
     private String name;
 
 
-    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.DETACH)
+    @ManyToOne
     private Customer customer;
 
     public void setCustomer(Customer customer){

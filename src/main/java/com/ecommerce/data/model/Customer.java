@@ -26,15 +26,14 @@ public class Customer {
 
     @ManyToMany(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
     @ToString.Exclude
-    private Set<Address> addresses;
+    private List<Address> addresses;
 
     public void setAddresses (Address address){
         if(addresses == null){
-            addresses = new HashSet<>();
+            addresses = new ArrayList<>();
         }
-        if (checkIfAddressExist(address)){
-            addresses.add(address);
-        }
+        addresses.add(address);
+
 
     }
     public void setCards(Card card){
@@ -44,13 +43,6 @@ public class Customer {
         cards.add(card);
     }
 
-    private boolean checkIfAddressExist(Address address){
-        if(!getAddresses().contains(address)){
-            return true;
-        }
-        return false;
-    }
-
     @OneToMany(mappedBy = "customer")
     @ToString.Exclude
     private Set<Card> cards;
@@ -58,4 +50,5 @@ public class Customer {
     @OneToMany(mappedBy = "customer", fetch = FetchType.EAGER)
     @ToString.Exclude
     private Set<Order> orders;
+
 }

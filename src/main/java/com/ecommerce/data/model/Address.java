@@ -1,8 +1,10 @@
 package com.ecommerce.data.model;
 
 import lombok.Data;
+import lombok.ToString;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -22,4 +24,14 @@ public class Address {
 
     private String street;
 
+    @ManyToMany(mappedBy = "addresses")
+    @ToString.Exclude
+    private List<Customer> customers;
+
+    public void setCustomer (Customer customer){
+        if (customer == null){
+            customers = new ArrayList<>();
+        }
+        customers.add(customer);
+    }
 }

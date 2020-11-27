@@ -122,6 +122,7 @@ class CustomerRepositoryTest {
         }
         assertThat(customer.getAddresses().size()).isEqualTo(1);
     }
+
     @Test
     void testThatWeCanUpdateCustomerDetails(){
         customer=customerRepository.findById(2).orElse(null);

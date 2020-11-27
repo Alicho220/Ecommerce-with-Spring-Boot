@@ -3,9 +3,10 @@ package com.ecommerce.service.order;
 import com.ecommerce.data.model.Order;
 import com.ecommerce.data.repository.OrderRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
-
+@Service
 public class OrderServiceImpl implements OrderService {
 
     @Autowired
@@ -13,11 +14,13 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public Order saveOrder(Order order) {
+
         return orderRepository.save(order);
     }
 
     @Override
     public Order findOrderById(Integer id) {
+
         return orderRepository.findById(id).orElse(null);
     }
 
@@ -28,12 +31,14 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public List<Order> findAllOrders(Order order) {
+    public List<Order> findAllOrders() {
+
         return orderRepository.findAll();
     }
 
     @Override
     public Order upDateOrder(Order order) {
+
         return orderRepository.save(order);
     }
 }

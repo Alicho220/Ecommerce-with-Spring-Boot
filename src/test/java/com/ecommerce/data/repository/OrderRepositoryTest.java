@@ -19,6 +19,7 @@ import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
+
 @SpringBootTest
 @Slf4j
 @Sql(scripts = {"classpath:db/insert.sql"})
@@ -67,15 +68,15 @@ class OrderRepositoryTest {
         order.setCanceled(false);
         order.setProducts(products);
 
-        assertThrows(OrderException.class, ()->{
-            orderRepository.save(order);
+        assertThrows(OrderException.class, () -> {
+            orderRepository.saveOrder(order);
         });
     }
     @Test
-    void testSaveOrderWithoutOrder(){
+    void testSaveOrderWithoutOrder() throws OrderException {
         Order fakeOrder = new Order();
         assertThrows(OrderException.class, ()->{
-            orderRepository.save(order);
+            orderRepository.saveOrder(order);
         });
     }
     @Test
@@ -90,7 +91,7 @@ class OrderRepositoryTest {
         order.setCustomer(customer);
 
         assertThrows(OrderException.class, ()->{
-            orderRepository.save(order);
+            orderRepository.saveOrder(order);
         });
 
 //        try{

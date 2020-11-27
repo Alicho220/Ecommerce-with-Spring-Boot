@@ -3,9 +3,10 @@ package com.ecommerce.service.customer;
 import com.ecommerce.data.model.Customer;
 import com.ecommerce.data.repository.CustomerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
-
+@Service
 public class CustomerServiceImpl implements CustomerService {
 
     @Autowired
